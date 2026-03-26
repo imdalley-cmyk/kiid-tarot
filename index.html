@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kiid AI · Daily Tarot</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{background:#1c1b1c;min-height:100vh;display:flex;flex-direction:column;align-items:center;font-family:'Inter',sans-serif;padding:28px 20px 40px;background-image:radial-gradient(ellipse at 15% 15%,rgba(210,40,135,.22) 0%,transparent 50%),radial-gradient(ellipse at 85% 85%,rgba(129,62,175,.28) 0%,transparent 50%);}
+.logo-pill{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:100px;padding:5px 14px;margin-bottom:12px;}
+.logo-dot{width:7px;height:7px;border-radius:50%;background:linear-gradient(135deg,#d22887,#813eaf);}
+.logo-text{font-size:10px;font-weight:700;color:rgba(255,255,255,.55);letter-spacing:.1em;text-transform:uppercase;}
+h1{font-size:clamp(1.6rem,8vw,2.4rem);font-weight:900;color:#eff5fe;text-align:center;margin-bottom:5px;}
+h1 span{background:linear-gradient(90deg,#f04fa8,#a05dd4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.sub{font-size:.85rem;color:rgba(255,255,255,.35);text-align:center;margin-bottom:20px;}
+.hint{font-size:12px;color:rgba(255,255,255,.3);display:flex;align-items:center;gap:6px;margin-bottom:16px;}
+.pulse{width:6px;height:6px;border-radius:50%;background:#d22887;animation:p 1.8s ease-in-out infinite;}
+@keyframes p{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+.scene{display:none;flex-direction:column;align-items:center;gap:16px;width:100%;max-width:320px;}
+.card{width:280px;height:460px;position:relative;transform-style:preserve-3d;transition:transform 0.8s cubic-bezier(.4,0,.2,1);filter:drop-shadow(0 20px 40px rgba(210,40,135,.35));cursor:pointer;touch-action:manipulation;}
+.card.flipped{transform:rotateY(180deg);}
+.back,.front{position:absolute;top:0;left:0;width:280px;height:460px;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:20px;overflow:hidden;}
+.back{background:#120d1e;border:2px solid rgba(210,40,135,.5);}
+.back svg{width:280px;height:460px;display:block;}
+.front{transform:rotateY(180deg);background:#111;border:2px solid rgba(129,62,175,.5);}
+.front img{position:absolute;top:0;left:0;width:280px;height:460px;object-fit:cover;display:block;border-radius:18px;}
+.front-topbar{position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(90deg,#d22887,#813eaf);z-index:3;border-radius:18px 18px 0 0;}
+.front-label{position:absolute;top:10px;left:0;right:0;text-align:center;font-size:9px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.9);z-index:3;text-shadow:0 1px 6px rgba(0,0,0,.95);}
+.front-overlay{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(4,1,12,.97) 0%,rgba(4,1,12,.8) 50%,transparent 100%);padding:36px 12px 14px;z-index:3;border-radius:0 0 18px 18px;}
+.front-name{font-size:30px;font-weight:800;color:white;text-align:center;margin-bottom:6px;}
+.front-kws{display:flex;gap:4px;justify-content:center;flex-wrap:wrap;}
+.kw{font-size:9px;font-weight:700;padding:3px 9px;border-radius:100px;background:rgba(210,40,135,.3);color:#f04fa8;border:1px solid rgba(210,40,135,.5);}
+.reading{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:16px 20px;width:100%;text-align:center;opacity:0;transform:translateY(12px);transition:opacity .5s ease .3s,transform .5s ease .3s;}
+.reading.show{opacity:1;transform:translateY(0);}
+.reading-lbl{font-size:9px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;background:linear-gradient(90deg,#f04fa8,#a05dd4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px;}
+.reading-txt{font-size:.88rem;line-height:1.65;color:rgba(255,255,255,.72);}
+.btn{background:linear-gradient(135deg,#d22887,#813eaf);color:white;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;border:none;border-radius:100px;padding:14px 32px;cursor:pointer;width:100%;max-width:280px;margin-top:4px;-webkit-appearance:none;touch-action:manipulation;}
+.btn:active{opacity:.85;}
+</style>
+</head>
+<body>
+<div class="logo-pill"><div class="logo-dot"></div><span class="logo-text">Kiid AI</span></div>
+<h1>Your <span>Daily Card</span></h1>
+<p class="sub">tap to reveal what the universe has to say</p>
+<div class="hint" id="hint"><div class="pulse"></div>tap the card to flip</div>
+<div class="scene" id="scene-fool" style="display:flex">
+  <div class="card" id="card-fool">
+    <div class="back"><svg viewBox="0 0 280 460" xmlns="http://www.w3.org/2000/svg"><rect width="280" height="460" fill="#120d1e"/><rect x="10" y="10" width="260" height="440" rx="13" fill="none" stroke="#d22887" stroke-width="1.5" opacity=".6"/><rect x="18" y="18" width="244" height="424" rx="10" fill="none" stroke="#813eaf" stroke-width=".8" opacity=".3"/><circle cx="140" cy="230" r="90" fill="none" stroke="#d22887" stroke-width="1" opacity=".2"/><circle cx="140" cy="230" r="62" fill="none" stroke="#813eaf" stroke-width="1" opacity=".3"/><circle cx="140" cy="230" r="30" fill="none" stroke="#d22887" stroke-width="1.5" opacity=".4"/><line x1="140" y1="168" x2="140" y2="200" stroke="#d22887" stroke-width="1.5" opacity=".6"/><line x1="140" y1="260" x2="140" y2="292" stroke="#d22887" stroke-width="1.5" opacity=".6"/><line x1="78" y1="230" x2="110" y2="230" stroke="#d22887" stroke-width="1.5" opacity=".6"/><line x1="170" y1="230" x2="202" y2="230" stroke="#d22887" stroke-width="1.5" opacity=".6"/><line x1="97" y1="187" x2="119" y2="209" stroke="#813eaf" stroke-width="1.5" opacity=".5"/><line x1="161" y1="251" x2="183" y2="273" stroke="#813eaf" stroke-width="1.5" opacity=".5"/><line x1="183" y1="187" x2="161" y2="209" stroke="#813eaf" stroke-width="1.5" opacity=".5"/><line x1="119" y1="251" x2="97" y2="273" stroke="#813eaf" stroke-width="1.5" opacity=".5"/><circle cx="140" cy="230" r="9" fill="#d22887" opacity=".9"/><circle cx="140" cy="230" r="4.5" fill="white" opacity=".8"/><circle cx="34" cy="50" r="4" fill="#d22887" opacity=".7"/><circle cx="246" cy="50" r="4" fill="#813eaf" opacity=".7"/><circle cx="34" cy="410" r="4" fill="#813eaf" opacity=".7"/><circle cx="246" cy="410" r="4" fill="#d22887" opacity=".7"/><text x="140" y="450" text-anchor="middle" fill="rgba(255,255,255,.15)" font-family="sans-serif" font-size="9" font-weight="700" letter-spacing="3">KIID AI</text></svg></div>
+    <div class="front">
+      <div class="front-topbar"></div>
+      <div class="front-label">THE FOOL · 0</div>
+      <img src="images/fool.png" alt="The Fool" width="280" height="460">
+      <div class="front-overlay">
+        <div class="front-name">The Fool</div>
+        <div class="front-kws"><span class="kw">new beginnings</span><span class="kw">freedom</span><span class="kw">leap of faith</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="reading" id="reading-fool">
+    <div class="reading-lbl">&#10022; Your Reading &#10022;</div>
+    <div class="reading-txt">A fresh adventure is calling your name. The universe is giving you full permission to leap — don't let fear talk you out of something beautiful.</div>
+  </div>
+</div>
+<div class="scene" id="scene-lovers" style="display:none">
+  <div class="card" id="card-lovers">
+    <div class="back"><svg viewBox="0 0 280 460" xmlns="http://www.w3.org/2000/svg"><rect width="280" height="460" fill="#120d1e"/><rect x="10" y="10" width="260" height="440" rx="13" fill="none" stroke="#d22887" stroke-width="1.5" opacity=".6"/><rect x="18" y="18" width="244" height="424" rx="10" fill="none" stroke="#813eaf" stroke-width=".8" opacity=".3"/><circle cx="140" cy="230" r="90" fill="none" stroke="#d22887" stroke-width="1" opacity=".2"/><circle cx="140" cy="230" r="62" fill="none" stroke="#813eaf" stroke-width="1" opacity=".3"/><circle cx="140" cy="230" r="30" fill="none" stroke="#d22887" stroke-width="1.5" opacity=".4"/><line x1="140" y1="168" x2="140" y2="200" stroke="#d22887" stroke-width="1.5" opacity=".6"/><line x1="140" y1="260" x2="140" y2="292" stroke="#d22887" stroke-width="1.5" opacity=".6"/><line x1="78" y1="230" x2="110" y2="230" stroke="#d22887" stroke-width="1.5" opacity=".6"/><line x1="170" y1="230" x2="202" y2="230" stroke="#d22887" stroke-width="1.5" opacity=".6"/><line x1="97" y1="187" x2="119" y2="209" stroke="#813eaf" stroke-width="1.5" opacity=".5"/><line x1="161" y1="251" x2="183" y2="273" stroke="#813eaf" stroke-width="1.5" opacity=".5"/><line x1="183" y1="187" x2="161" y2="209" stroke="#813eaf" stroke-width="1.5" opacity=".5"/><line x1="119" y1="251" x2="97" y2="273" stroke="#813eaf" stroke-width="1.5" opacity=".5"/><circle cx="140" cy="230" r="9" fill="#d22887" opacity=".9"/><circle cx="140" cy="230" r="4.5" fill="white" opacity=".8"/><circle cx="34" cy="50" r="4" fill="#d22887" opacity=".7"/><circle cx="246" cy="50" r="4" fill="#813eaf" opacity=".7"/><circle cx="34" cy="410" r="4" fill="#813eaf" opacity=".7"/><circle cx="246" cy="410" r="4" fill="#d22887" opacity=".7"/><text x="140" y="450" text-anchor="middle" fill="rgba(255,255,255,.15)" font-family="sans-serif" font-size="9" font-weight="700" letter-spacing="3">KIID AI</text></svg></div>
+    <div class="front">
+      <div class="front-topbar"></div>
+      <div class="front-label">THE LOVERS · VI</div>
+      <img src="images/lovers.png" alt="The Lovers" width="280" height="460">
+      <div class="front-overlay">
+        <div class="front-name">The Lovers</div>
+        <div class="front-kws"><span class="kw">connection</span><span class="kw">choice</span><span class="kw">alignment</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="reading" id="reading-lovers">
+    <div class="reading-lbl">&#10022; Your Reading &#10022;</div>
+    <div class="reading-txt">A meaningful choice is in front of you. Follow what your heart already knows — alignment between your values and your actions is everything right now.</div>
+  </div>
+</div>
+<div class="scene" id="scene-star" style="display:none">
+  <div class="card" id="card-star">
+    <div class="back"><svg viewBox="0 0 280 460" xmlns="http://www.w3.org/2000/svg"><rect width="280" height="460" fill="#120d1e"/><rect x="10" y="10" width="260" height="440" rx="13" fill="none" stroke="#d22887" stroke-width="1.5" opacity=".6"/><rect x="18" y="18" width="244" height="424" rx="10" fill="none" stroke="#813eaf" stroke-width=".8" opacity=".3"/><circle cx="140" cy="230" r="90" fill="none" stroke="#d22887" stroke-width="1" opacity=".2"/><circle cx="140" cy="230" r="62" fill="none" stroke="#813eaf" stroke-width="1" opacity=".3"/><circle cx="140" cy="230" r="30" fill="none" stroke="#d22887" stroke-width="1.5" opacity=".4"/><line x1="140" y1="168" x2="140" y2="200" stroke="#d22887" stroke-width="1.5" opacity=".6"/><line x1="140" y1="260" x2="140" y2="292" stroke="#d22887" stroke-width="1.5" opacity=".6"/><line x1="78" y1="230" x2="110" y2="230" stroke="#d22887" stroke-width="1.5" opacity=".6"/><line x1="170" y1="230" x2="202" y2="230" stroke="#d22887" stroke-width="1.5" opacity=".6"/><line x1="97" y1="187" x2="119" y2="209" stroke="#813eaf" stroke-width="1.5" opacity=".5"/><line x1="161" y1="251" x2="183" y2="273" stroke="#813eaf" stroke-width="1.5" opacity=".5"/><line x1="183" y1="187" x2="161" y2="209" stroke="#813eaf" stroke-width="1.5" opacity=".5"/><line x1="119" y1="251" x2="97" y2="273" stroke="#813eaf" stroke-width="1.5" opacity=".5"/><circle cx="140" cy="230" r="9" fill="#d22887" opacity=".9"/><circle cx="140" cy="230" r="4.5" fill="white" opacity=".8"/><circle cx="34" cy="50" r="4" fill="#d22887" opacity=".7"/><circle cx="246" cy="50" r="4" fill="#813eaf" opacity=".7"/><circle cx="34" cy="410" r="4" fill="#813eaf" opacity=".7"/><circle cx="246" cy="410" r="4" fill="#d22887" opacity=".7"/><text x="140" y="450" text-anchor="middle" fill="rgba(255,255,255,.15)" font-family="sans-serif" font-size="9" font-weight="700" letter-spacing="3">KIID AI</text></svg></div>
+    <div class="front">
+      <div class="front-topbar"></div>
+      <div class="front-label">THE STAR · XVII</div>
+      <img src="images/star.png" alt="The Star" width="280" height="460">
+      <div class="front-overlay">
+        <div class="front-name">The Star</div>
+        <div class="front-kws"><span class="kw">hope</span><span class="kw">healing</span><span class="kw">renewal</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="reading" id="reading-star">
+    <div class="reading-lbl">&#10022; Your Reading &#10022;</div>
+    <div class="reading-txt">After the storm, you shine. You are held, guided, and worthy of good things. Breathe. Renewal is already underway.</div>
+  </div>
+</div>
+<div class="scene" id="scene-moon" style="display:none">
+  <div class="card" id="card-moon">
+    <div class="back"><svg viewBox="0 0 280 460" xmlns="http://www.w3.org/2000/svg"><rect width="280" height="460" fill="#120d1e"/><rect x="10" y="10" width="260" height="440" rx="13" fill="none" stroke="#d22887" stroke-width="1.5" opacity=".6"/><rect x="18" y="18" width="244" height="424" rx="10" fill="none" stroke="#813eaf" stroke-width=".8" opacity=".3"/><circle cx="140" cy="230" r="90" fill="none" stroke="#d22887" stroke-width="1" opacity=".2"/><circle cx="140" cy="230" r="62" fill="none" stroke="#813eaf" stroke-width="1" opacity=".3"/><circle cx="140" cy="230" r="30" fill="none" stroke="#d22887" stroke-width="1.5" opacity=".4"/><line x1="140" y1="168" x2="140" y2="200" stroke="#d22887" stroke-width="1.5" opacity=".6"/><line x1="140" y1="260" x2="140" y2="292" stroke="#d22887" stroke-width="1.5" opacity=".6"/><line x1="78" y1="230" x2="110" y2="230" stroke="#d22887" stroke-width="1.5" opacity=".6"/><line x1="170" y1="230" x2="202" y2="230" stroke="#d22887" stroke-width="1.5" opacity=".6"/><line x1="97" y1="187" x2="119" y2="209" stroke="#813eaf" stroke-width="1.5" opacity=".5"/><line x1="161" y1="251" x2="183" y2="273" stroke="#813eaf" stroke-width="1.5" opacity=".5"/><line x1="183" y1="187" x2="161" y2="209" stroke="#813eaf" stroke-width="1.5" opacity=".5"/><line x1="119" y1="251" x2="97" y2="273" stroke="#813eaf" stroke-width="1.5" opacity=".5"/><circle cx="140" cy="230" r="9" fill="#d22887" opacity=".9"/><circle cx="140" cy="230" r="4.5" fill="white" opacity=".8"/><circle cx="34" cy="50" r="4" fill="#d22887" opacity=".7"/><circle cx="246" cy="50" r="4" fill="#813eaf" opacity=".7"/><circle cx="34" cy="410" r="4" fill="#813eaf" opacity=".7"/><circle cx="246" cy="410" r="4" fill="#d22887" opacity=".7"/><text x="140" y="450" text-anchor="middle" fill="rgba(255,255,255,.15)" font-family="sans-serif" font-size="9" font-weight="700" letter-spacing="3">KIID AI</text></svg></div>
+    <div class="front">
+      <div class="front-topbar"></div>
+      <div class="front-label">THE MOON · XVIII</div>
+      <img src="images/moon.png" alt="The Moon" width="280" height="460">
+      <div class="front-overlay">
+        <div class="front-name">The Moon</div>
+        <div class="front-kws"><span class="kw">intuition</span><span class="kw">dreams</span><span class="kw">mystery</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="reading" id="reading-moon">
+    <div class="reading-lbl">&#10022; Your Reading &#10022;</div>
+    <div class="reading-txt">Trust your gut — even when the path looks blurry. Your subconscious is smarter than your doubts. Navigate by feeling, not just by facts.</div>
+  </div>
+</div>
+<div class="scene" id="scene-sun" style="display:none">
+  <div class="card" id="card-sun">
+    <div class="back"><svg viewBox="0 0 280 460" xmlns="http://www.w3.org/2000/svg"><rect width="280" height="460" fill="#120d1e"/><rect x="10" y="10" width="260" height="440" rx="13" fill="none" stroke="#d22887" stroke-width="1.5" opacity=".6"/><rect x="18" y="18" width="244" height="424" rx="10" fill="none" stroke="#813eaf" stroke-width=".8" opacity=".3"/><circle cx="140" cy="230" r="90" fill="none" stroke="#d22887" stroke-width="1" opacity=".2"/><circle cx="140" cy="230" r="62" fill="none" stroke="#813eaf" stroke-width="1" opacity=".3"/><circle cx="140" cy="230" r="30" fill="none" stroke="#d22887" stroke-width="1.5" opacity=".4"/><line x1="140" y1="168" x2="140" y2="200" stroke="#d22887" stroke-width="1.5" opacity=".6"/><line x1="140" y1="260" x2="140" y2="292" stroke="#d22887" stroke-width="1.5" opacity=".6"/><line x1="78" y1="230" x2="110" y2="230" stroke="#d22887" stroke-width="1.5" opacity=".6"/><line x1="170" y1="230" x2="202" y2="230" stroke="#d22887" stroke-width="1.5" opacity=".6"/><line x1="97" y1="187" x2="119" y2="209" stroke="#813eaf" stroke-width="1.5" opacity=".5"/><line x1="161" y1="251" x2="183" y2="273" stroke="#813eaf" stroke-width="1.5" opacity=".5"/><line x1="183" y1="187" x2="161" y2="209" stroke="#813eaf" stroke-width="1.5" opacity=".5"/><line x1="119" y1="251" x2="97" y2="273" stroke="#813eaf" stroke-width="1.5" opacity=".5"/><circle cx="140" cy="230" r="9" fill="#d22887" opacity=".9"/><circle cx="140" cy="230" r="4.5" fill="white" opacity=".8"/><circle cx="34" cy="50" r="4" fill="#d22887" opacity=".7"/><circle cx="246" cy="50" r="4" fill="#813eaf" opacity=".7"/><circle cx="34" cy="410" r="4" fill="#813eaf" opacity=".7"/><circle cx="246" cy="410" r="4" fill="#d22887" opacity=".7"/><text x="140" y="450" text-anchor="middle" fill="rgba(255,255,255,.15)" font-family="sans-serif" font-size="9" font-weight="700" letter-spacing="3">KIID AI</text></svg></div>
+    <div class="front">
+      <div class="front-topbar"></div>
+      <div class="front-label">THE SUN · XIX</div>
+      <img src="images/sun.png" alt="The Sun" width="280" height="460">
+      <div class="front-overlay">
+        <div class="front-name">The Sun</div>
+        <div class="front-kws"><span class="kw">joy</span><span class="kw">confidence</span><span class="kw">vitality</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="reading" id="reading-sun">
+    <div class="reading-lbl">&#10022; Your Reading &#10022;</div>
+    <div class="reading-txt">Today is yours. Stop shrinking — your energy is magnetic right now. Show up fully and watch what opens up.</div>
+  </div>
+</div>
+<div class="scene" id="scene-wheel" style="display:none">
+  <div class="card" id="card-wheel">
+    <div class="back"><svg viewBox="0 0 280 460" xmlns="http://www.w3.org/2000/svg"><rect width="280" height="460" fill="#120d1e"/><rect x="10" y="10" width="260" height="440" rx="13" fill="none" stroke="#d22887" stroke-width="1.5" opacity=".6"/><rect x="18" y="18" width="244" height="424" rx="10" fill="none" stroke="#813eaf" stroke-width=".8" opacity=".3"/><circle cx="140" cy="230" r="90" fill="none" stroke="#d22887" stroke-width="1" opacity=".2"/><circle cx="140" cy="230" r="62" fill="none" stroke="#813eaf" stroke-width="1" opacity=".3"/><circle cx="140" cy="230" r="30" fill="none" stroke="#d22887" stroke-width="1.5" opacity=".4"/><line x1="140" y1="168" x2="140" y2="200" stroke="#d22887" stroke-width="1.5" opacity=".6"/><line x1="140" y1="260" x2="140" y2="292" stroke="#d22887" stroke-width="1.5" opacity=".6"/><line x1="78" y1="230" x2="110" y2="230" stroke="#d22887" stroke-width="1.5" opacity=".6"/><line x1="170" y1="230" x2="202" y2="230" stroke="#d22887" stroke-width="1.5" opacity=".6"/><line x1="97" y1="187" x2="119" y2="209" stroke="#813eaf" stroke-width="1.5" opacity=".5"/><line x1="161" y1="251" x2="183" y2="273" stroke="#813eaf" stroke-width="1.5" opacity=".5"/><line x1="183" y1="187" x2="161" y2="209" stroke="#813eaf" stroke-width="1.5" opacity=".5"/><line x1="119" y1="251" x2="97" y2="273" stroke="#813eaf" stroke-width="1.5" opacity=".5"/><circle cx="140" cy="230" r="9" fill="#d22887" opacity=".9"/><circle cx="140" cy="230" r="4.5" fill="white" opacity=".8"/><circle cx="34" cy="50" r="4" fill="#d22887" opacity=".7"/><circle cx="246" cy="50" r="4" fill="#813eaf" opacity=".7"/><circle cx="34" cy="410" r="4" fill="#813eaf" opacity=".7"/><circle cx="246" cy="410" r="4" fill="#d22887" opacity=".7"/><text x="140" y="450" text-anchor="middle" fill="rgba(255,255,255,.15)" font-family="sans-serif" font-size="9" font-weight="700" letter-spacing="3">KIID AI</text></svg></div>
+    <div class="front">
+      <div class="front-topbar"></div>
+      <div class="front-label">WHEEL OF FORTUNE · X</div>
+      <img src="images/wheel.png" alt="Wheel of Fortune" width="280" height="460">
+      <div class="front-overlay">
+        <div class="front-name">Wheel of Fortune</div>
+        <div class="front-kws"><span class="kw">cycles</span><span class="kw">turning point</span><span class="kw">luck</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="reading" id="reading-wheel">
+    <div class="reading-lbl">&#10022; Your Reading &#10022;</div>
+    <div class="reading-txt">The wheel is turning in your favour. What felt stuck is beginning to move. Stay flexible — the shift you have been waiting for is already in motion.</div>
+  </div>
+</div>
+<div class="scene" id="scene-world" style="display:none">
+  <div class="card" id="card-world">
+    <div class="back"><svg viewBox="0 0 280 460" xmlns="http://www.w3.org/2000/svg"><rect width="280" height="460" fill="#120d1e"/><rect x="10" y="10" width="260" height="440" rx="13" fill="none" stroke="#d22887" stroke-width="1.5" opacity=".6"/><rect x="18" y="18" width="244" height="424" rx="10" fill="none" stroke="#813eaf" stroke-width=".8" opacity=".3"/><circle cx="140" cy="230" r="90" fill="none" stroke="#d22887" stroke-width="1" opacity=".2"/><circle cx="140" cy="230" r="62" fill="none" stroke="#813eaf" stroke-width="1" opacity=".3"/><circle cx="140" cy="230" r="30" fill="none" stroke="#d22887" stroke-width="1.5" opacity=".4"/><line x1="140" y1="168" x2="140" y2="200" stroke="#d22887" stroke-width="1.5" opacity=".6"/><line x1="140" y1="260" x2="140" y2="292" stroke="#d22887" stroke-width="1.5" opacity=".6"/><line x1="78" y1="230" x2="110" y2="230" stroke="#d22887" stroke-width="1.5" opacity=".6"/><line x1="170" y1="230" x2="202" y2="230" stroke="#d22887" stroke-width="1.5" opacity=".6"/><line x1="97" y1="187" x2="119" y2="209" stroke="#813eaf" stroke-width="1.5" opacity=".5"/><line x1="161" y1="251" x2="183" y2="273" stroke="#813eaf" stroke-width="1.5" opacity=".5"/><line x1="183" y1="187" x2="161" y2="209" stroke="#813eaf" stroke-width="1.5" opacity=".5"/><line x1="119" y1="251" x2="97" y2="273" stroke="#813eaf" stroke-width="1.5" opacity=".5"/><circle cx="140" cy="230" r="9" fill="#d22887" opacity=".9"/><circle cx="140" cy="230" r="4.5" fill="white" opacity=".8"/><circle cx="34" cy="50" r="4" fill="#d22887" opacity=".7"/><circle cx="246" cy="50" r="4" fill="#813eaf" opacity=".7"/><circle cx="34" cy="410" r="4" fill="#813eaf" opacity=".7"/><circle cx="246" cy="410" r="4" fill="#d22887" opacity=".7"/><text x="140" y="450" text-anchor="middle" fill="rgba(255,255,255,.15)" font-family="sans-serif" font-size="9" font-weight="700" letter-spacing="3">KIID AI</text></svg></div>
+    <div class="front">
+      <div class="front-topbar"></div>
+      <div class="front-label">THE WORLD · XXI</div>
+      <img src="images/world.png" alt="The World" width="280" height="460">
+      <div class="front-overlay">
+        <div class="front-name">The World</div>
+        <div class="front-kws"><span class="kw">completion</span><span class="kw">wholeness</span><span class="kw">achievement</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="reading" id="reading-world">
+    <div class="reading-lbl">&#10022; Your Reading &#10022;</div>
+    <div class="reading-txt">You have arrived. Honour how far you have come. This is a moment of real fullness — let yourself feel it completely.</div>
+  </div>
+</div>
+<div class="scene" id="scene-magician" style="display:none">
+  <div class="card" id="card-magician">
+    <div class="back"><svg viewBox="0 0 280 460" xmlns="http://www.w3.org/2000/svg"><rect width="280" height="460" fill="#120d1e"/><rect x="10" y="10" width="260" height="440" rx="13" fill="none" stroke="#d22887" stroke-width="1.5" opacity=".6"/><rect x="18" y="18" width="244" height="424" rx="10" fill="none" stroke="#813eaf" stroke-width=".8" opacity=".3"/><circle cx="140" cy="230" r="90" fill="none" stroke="#d22887" stroke-width="1" opacity=".2"/><circle cx="140" cy="230" r="62" fill="none" stroke="#813eaf" stroke-width="1" opacity=".3"/><circle cx="140" cy="230" r="30" fill="none" stroke="#d22887" stroke-width="1.5" opacity=".4"/><line x1="140" y1="168" x2="140" y2="200" stroke="#d22887" stroke-width="1.5" opacity=".6"/><line x1="140" y1="260" x2="140" y2="292" stroke="#d22887" stroke-width="1.5" opacity=".6"/><line x1="78" y1="230" x2="110" y2="230" stroke="#d22887" stroke-width="1.5" opacity=".6"/><line x1="170" y1="230" x2="202" y2="230" stroke="#d22887" stroke-width="1.5" opacity=".6"/><line x1="97" y1="187" x2="119" y2="209" stroke="#813eaf" stroke-width="1.5" opacity=".5"/><line x1="161" y1="251" x2="183" y2="273" stroke="#813eaf" stroke-width="1.5" opacity=".5"/><line x1="183" y1="187" x2="161" y2="209" stroke="#813eaf" stroke-width="1.5" opacity=".5"/><line x1="119" y1="251" x2="97" y2="273" stroke="#813eaf" stroke-width="1.5" opacity=".5"/><circle cx="140" cy="230" r="9" fill="#d22887" opacity=".9"/><circle cx="140" cy="230" r="4.5" fill="white" opacity=".8"/><circle cx="34" cy="50" r="4" fill="#d22887" opacity=".7"/><circle cx="246" cy="50" r="4" fill="#813eaf" opacity=".7"/><circle cx="34" cy="410" r="4" fill="#813eaf" opacity=".7"/><circle cx="246" cy="410" r="4" fill="#d22887" opacity=".7"/><text x="140" y="450" text-anchor="middle" fill="rgba(255,255,255,.15)" font-family="sans-serif" font-size="9" font-weight="700" letter-spacing="3">KIID AI</text></svg></div>
+    <div class="front">
+      <div class="front-topbar"></div>
+      <div class="front-label">THE MAGICIAN · I</div>
+      <img src="images/magician.png" alt="The Magician" width="280" height="460">
+      <div class="front-overlay">
+        <div class="front-name">The Magician</div>
+        <div class="front-kws"><span class="kw">manifestation</span><span class="kw">power</span><span class="kw">willpower</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="reading" id="reading-magician">
+    <div class="reading-lbl">&#10022; Your Reading &#10022;</div>
+    <div class="reading-txt">Everything you need is already in your hands. Stop waiting for permission — your ideas, your drive, your skills are enough. Begin.</div>
+  </div>
+</div>
+<button class="btn" onclick="redraw()">Draw Another Card</button>
+<script>
+var CARDS=['fool', 'lovers', 'star', 'moon', 'sun', 'wheel', 'world', 'magician'];
+var lastIndex=-1,currentId=null,flipped=false;
+function showCard(id){CARDS.forEach(function(c){document.getElementById('scene-'+c).style.display='none';});document.getElementById('scene-'+id).style.display='flex';currentId=id;flipped=false;}
+function pickCard(){var i;do{i=Math.floor(Math.random()*CARDS.length);}while(i===lastIndex&&CARDS.length>1);lastIndex=i;showCard(CARDS[i]);document.getElementById('hint').style.display='flex';}
+function flipCard(id){if(flipped)return;flipped=true;document.getElementById('card-'+id).classList.add('flipped');document.getElementById('hint').style.display='none';setTimeout(function(){document.getElementById('reading-'+id).classList.add('show');},700);}
+function redraw(){if(currentId){document.getElementById('card-'+currentId).classList.remove('flipped');document.getElementById('reading-'+currentId).classList.remove('show');}setTimeout(pickCard,100);}
+CARDS.forEach(function(id){document.getElementById('card-'+id).addEventListener('click',function(){flipCard(id);});document.getElementById('card-'+id).addEventListener('touchend',function(e){e.preventDefault();flipCard(id);});});
+pickCard();
+</script>
+</body>
+</html>
