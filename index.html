@@ -4,144 +4,234 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kiid AI · Daily Tarot</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 body {
-  background: #1c1b1c;
+  background: #1e1525;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   font-family: 'Inter', sans-serif;
-  padding: 28px 20px 40px;
+  padding: 32px 20px 48px;
   background-image:
-    radial-gradient(ellipse at 15% 15%, rgba(210,40,135,.22) 0%, transparent 50%),
-    radial-gradient(ellipse at 85% 85%, rgba(129,62,175,.28) 0%, transparent 50%);
+    radial-gradient(ellipse at 20% 10%, rgba(129,62,175,.35) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 90%, rgba(210,40,135,.2) 0%, transparent 50%);
 }
-.logo-pill { display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:100px;padding:5px 14px;margin-bottom:12px; }
-.logo-dot { width:7px;height:7px;border-radius:50%;background:linear-gradient(135deg,#d22887,#813eaf); }
-.logo-text { font-size:10px;font-weight:700;color:rgba(255,255,255,.55);letter-spacing:.1em;text-transform:uppercase; }
-h1 { font-size:clamp(1.6rem,8vw,2.4rem);font-weight:900;color:#eff5fe;text-align:center;margin-bottom:5px; }
+
+.logo-wrap { display:flex;flex-direction:column;align-items:center;margin-bottom:10px; }
+h1 { font-size:clamp(2rem,9vw,2.8rem);font-weight:900;color:white;text-align:center;margin-bottom:6px;line-height:1.1; }
 h1 span { background:linear-gradient(90deg,#f04fa8,#a05dd4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text; }
-.sub { font-size:.85rem;color:rgba(255,255,255,.35);text-align:center;margin-bottom:24px; }
+.sub { font-size:.9rem;color:rgba(255,255,255,.4);text-align:center;margin-bottom:24px; }
 
-/* Card back - always visible until clicked */
-.card-back {
-  width: 280px;
-  height: 460px;
-  background: #120d1e;
-  border: 2px solid rgba(210,40,135,.5);
-  border-radius: 20px;
-  cursor: pointer;
-  box-shadow: 0 20px 40px rgba(210,40,135,.35);
-  display: block;
-}
-.card-back svg { width: 280px; height: 460px; display: block; border-radius: 18px; }
-
-/* Card front - the revealed state */
-.card-front {
-  width: 280px;
-  position: relative;
-  border-radius: 20px;
-  overflow: hidden;
-  box-shadow: 0 20px 40px rgba(129,62,175,.35);
-  display: none;
-}
-.card-front img {
-  width: 280px;
-  height: 460px;
-  object-fit: cover;
-  display: block;
-  border-radius: 20px;
-}
-.card-front .topbar {
-  position: absolute; top: 0; left: 0; right: 0; height: 5px;
-  background: linear-gradient(90deg,#d22887,#813eaf);
-  border-radius: 20px 20px 0 0;
-}
-.card-front .label {
-  position: absolute; top: 10px; left: 0; right: 0;
-  text-align: center; font-size: 9px; font-weight: 800;
-  letter-spacing: .16em; text-transform: uppercase;
-  color: rgba(255,255,255,.9);
-  text-shadow: 0 1px 6px rgba(0,0,0,.95);
-}
-.card-front .overlay {
-  position: absolute; bottom: 0; left: 0; right: 0;
-  background: linear-gradient(to top, rgba(4,1,12,.97) 0%, rgba(4,1,12,.8) 50%, transparent 100%);
-  padding: 36px 12px 14px;
-  border-radius: 0 0 20px 20px;
-}
-.card-front .name { font-size:30px;font-weight:800;color:white;text-align:center;margin-bottom:6px; }
-.card-front .kws { display:flex;gap:4px;justify-content:center;flex-wrap:wrap; }
-.kw { font-size:9px;font-weight:700;padding:3px 9px;border-radius:100px;background:rgba(210,40,135,.3);color:#f04fa8;border:1px solid rgba(210,40,135,.5); }
-
-.reading {
-  background: rgba(255,255,255,.05);
-  border: 1px solid rgba(255,255,255,.1);
-  border-radius: 18px; padding: 16px 20px;
-  width: 100%; max-width: 300px; text-align: center;
-  margin-top: 16px; display: none;
-}
-.reading-lbl { font-size:9px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;background:linear-gradient(90deg,#f04fa8,#a05dd4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px; }
-.reading-txt { font-size:.88rem;line-height:1.65;color:rgba(255,255,255,.72); }
-
-.btn { background:linear-gradient(135deg,#d22887,#813eaf);color:white;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;border:none;border-radius:100px;padding:14px 32px;cursor:pointer;width:100%;max-width:280px;margin-top:12px;display:none; }
-.hint { font-size:12px;color:rgba(255,255,255,.3);display:flex;align-items:center;gap:6px;margin-bottom:16px; }
+.hint { font-size:12px;color:rgba(255,255,255,.3);display:flex;align-items:center;gap:6px;margin-bottom:14px; }
 .pulse { width:6px;height:6px;border-radius:50%;background:#d22887;animation:p 1.8s ease-in-out infinite; }
 @keyframes p { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.7)} }
+
+/* ── CARD BACK ── */
+.card-back {
+  width: 340px;
+  height: 560px;
+  background: #120d1e;
+  border: 2px solid rgba(210,40,135,.5);
+  border-radius: 24px;
+  cursor: pointer;
+  box-shadow: 0 24px 60px rgba(129,62,175,.4);
+  overflow: hidden;
+}
+.card-back svg { width: 340px; height: 560px; display: block; }
+
+/* ── CARD FRONT — single unified card ── */
+.card-front {
+  width: 340px;
+  display: none;
+  flex-direction: column;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 24px 60px rgba(129,62,175,.4);
+  border: 2px solid rgba(255,255,255,.12);
+  background: #0e0818;
+  cursor: default;
+}
+
+/* Top gradient bar */
+.card-topbar {
+  height: 5px;
+  background: linear-gradient(90deg, #d22887, #813eaf);
+  flex-shrink: 0;
+}
+
+/* Label row */
+.card-label {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.5);
+  text-align: center;
+  padding: 10px 16px 0;
+  flex-shrink: 0;
+}
+
+/* Image — fills most of card */
+.card-img-wrap {
+  position: relative;
+  width: 100%;
+  height: 320px;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+.card-img-wrap img {
+  width: 100%;
+  height: 320px;
+  object-fit: cover;
+  display: block;
+}
+/* Fade bottom of image into card background */
+.card-img-wrap::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 80px;
+  background: linear-gradient(to top, #0e0818, transparent);
+  pointer-events: none;
+}
+
+/* Card name */
+.card-name {
+  font-size: 32px;
+  font-weight: 900;
+  color: white;
+  text-align: left;
+  padding: 10px 18px 6px;
+  line-height: 1.1;
+  flex-shrink: 0;
+}
+
+/* Divider */
+.card-divider {
+  height: 1px;
+  background: rgba(255,255,255,.08);
+  margin: 0 18px;
+  flex-shrink: 0;
+}
+
+/* Reading section inside card */
+.card-reading {
+  padding: 14px 18px 18px;
+  flex-shrink: 0;
+}
+.reading-lbl {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  background: linear-gradient(90deg,#f04fa8,#a05dd4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-align: center;
+  margin-bottom: 8px;
+}
+.reading-txt {
+  font-size: .86rem;
+  line-height: 1.65;
+  color: rgba(255,255,255,.7);
+  text-align: center;
+  margin-bottom: 12px;
+}
+.kws {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.kw {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 5px 14px;
+  border-radius: 100px;
+  background: rgba(210,40,135,.2);
+  color: #f04fa8;
+  border: 1px solid rgba(210,40,135,.45);
+}
+
+/* Draw button */
+.btn {
+  background: linear-gradient(135deg, #d22887, #9b3dd4);
+  color: white;
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  border: none;
+  border-radius: 100px;
+  padding: 16px 32px;
+  cursor: pointer;
+  width: 100%;
+  max-width: 340px;
+  margin-top: 18px;
+  display: none;
+  -webkit-appearance: none;
+  touch-action: manipulation;
+  box-shadow: 0 8px 32px rgba(210,40,135,.4);
+}
+.btn:active { opacity:.88;transform:scale(.98); }
 </style>
 </head>
 <body>
 
-<div class="logo-pill"><div class="logo-dot"></div><span class="logo-text">Kiid AI</span></div>
+<div class="logo-wrap"><svg width="52" height="52" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+<defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#d22887"/><stop offset="100%" stop-color="#813eaf"/></linearGradient></defs>
+<path d="M50 5 C28 5 10 23 10 45 C10 57 16 67 25 74 C16 81 10 91 10 95 C10 97 12 99 14 98 C16 97 17 95 17 93 C17 82 32 74 50 74 C68 74 83 82 83 93 C83 95 84 97 86 98 C88 99 90 97 90 95 C90 91 84 81 75 74 C84 67 90 57 90 45 C90 23 72 5 50 5Z M50 66 C36 66 24 55 24 43 C24 31 36 20 50 20 C64 20 76 31 76 43 C76 55 64 66 50 66Z" fill="url(#lg)"/>
+</svg></div>
 <h1>Your <span>Daily Card</span></h1>
 <p class="sub">tap to reveal what the universe has to say</p>
 <div class="hint" id="hint"><div class="pulse"></div>tap the card to reveal</div>
 
 <!-- BACK -->
 <div class="card-back" id="card-back" onclick="reveal()">
-  <svg viewBox="0 0 280 460" xmlns="http://www.w3.org/2000/svg">
-    <rect width="280" height="460" fill="#120d1e"/>
-    <rect x="10" y="10" width="260" height="440" rx="13" fill="none" stroke="#d22887" stroke-width="1.5" opacity=".6"/>
-    <rect x="18" y="18" width="244" height="424" rx="10" fill="none" stroke="#813eaf" stroke-width=".8" opacity=".3"/>
-    <circle cx="140" cy="230" r="90" fill="none" stroke="#d22887" stroke-width="1" opacity=".2"/>
-    <circle cx="140" cy="230" r="62" fill="none" stroke="#813eaf" stroke-width="1" opacity=".3"/>
-    <circle cx="140" cy="230" r="30" fill="none" stroke="#d22887" stroke-width="1.5" opacity=".4"/>
-    <line x1="140" y1="168" x2="140" y2="200" stroke="#d22887" stroke-width="1.5" opacity=".6"/>
-    <line x1="140" y1="260" x2="140" y2="292" stroke="#d22887" stroke-width="1.5" opacity=".6"/>
-    <line x1="78" y1="230" x2="110" y2="230" stroke="#d22887" stroke-width="1.5" opacity=".6"/>
-    <line x1="170" y1="230" x2="202" y2="230" stroke="#d22887" stroke-width="1.5" opacity=".6"/>
-    <line x1="97" y1="187" x2="119" y2="209" stroke="#813eaf" stroke-width="1.5" opacity=".5"/>
-    <line x1="161" y1="251" x2="183" y2="273" stroke="#813eaf" stroke-width="1.5" opacity=".5"/>
-    <line x1="183" y1="187" x2="161" y2="209" stroke="#813eaf" stroke-width="1.5" opacity=".5"/>
-    <line x1="119" y1="251" x2="97" y2="273" stroke="#813eaf" stroke-width="1.5" opacity=".5"/>
-    <circle cx="140" cy="230" r="9" fill="#d22887" opacity=".9"/>
-    <circle cx="140" cy="230" r="4.5" fill="white" opacity=".8"/>
-    <circle cx="34" cy="50" r="4" fill="#d22887" opacity=".7"/>
-    <circle cx="246" cy="50" r="4" fill="#813eaf" opacity=".7"/>
-    <circle cx="34" cy="410" r="4" fill="#813eaf" opacity=".7"/>
-    <circle cx="246" cy="410" r="4" fill="#d22887" opacity=".7"/>
-    <text x="140" y="450" text-anchor="middle" fill="rgba(255,255,255,.15)" font-family="sans-serif" font-size="9" font-weight="700" letter-spacing="3">KIID AI</text>
+  <svg viewBox="0 0 340 560" xmlns="http://www.w3.org/2000/svg">
+    <rect width="340" height="560" fill="#120d1e"/>
+    <rect x="12" y="12" width="316" height="536" rx="14" fill="none" stroke="#d22887" stroke-width="1.5" opacity=".6"/>
+    <rect x="20" y="20" width="300" height="520" rx="11" fill="none" stroke="#813eaf" stroke-width=".8" opacity=".3"/>
+    <circle cx="170" cy="280" r="112" fill="none" stroke="#d22887" stroke-width="1" opacity=".2"/>
+    <circle cx="170" cy="280" r="78" fill="none" stroke="#813eaf" stroke-width="1" opacity=".3"/>
+    <circle cx="170" cy="280" r="38" fill="none" stroke="#d22887" stroke-width="1.5" opacity=".4"/>
+    <line x1="170" y1="200" x2="170" y2="242" stroke="#d22887" stroke-width="1.5" opacity=".6"/>
+    <line x1="170" y1="318" x2="170" y2="360" stroke="#d22887" stroke-width="1.5" opacity=".6"/>
+    <line x1="90" y1="280" x2="132" y2="280" stroke="#d22887" stroke-width="1.5" opacity=".6"/>
+    <line x1="208" y1="280" x2="250" y2="280" stroke="#d22887" stroke-width="1.5" opacity=".6"/>
+    <line x1="113" y1="223" x2="141" y2="251" stroke="#813eaf" stroke-width="1.5" opacity=".5"/>
+    <line x1="199" y1="309" x2="227" y2="337" stroke="#813eaf" stroke-width="1.5" opacity=".5"/>
+    <line x1="227" y1="223" x2="199" y2="251" stroke="#813eaf" stroke-width="1.5" opacity=".5"/>
+    <line x1="141" y1="309" x2="113" y2="337" stroke="#813eaf" stroke-width="1.5" opacity=".5"/>
+    <circle cx="170" cy="280" r="12" fill="#d22887" opacity=".9"/>
+    <circle cx="170" cy="280" r="6" fill="white" opacity=".8"/>
+    <circle cx="44" cy="60" r="5" fill="#d22887" opacity=".7"/>
+    <circle cx="296" cy="60" r="5" fill="#813eaf" opacity=".7"/>
+    <circle cx="44" cy="500" r="5" fill="#813eaf" opacity=".7"/>
+    <circle cx="296" cy="500" r="5" fill="#d22887" opacity=".7"/>
+    <text x="170" y="544" text-anchor="middle" fill="rgba(255,255,255,.15)" font-family="sans-serif" font-size="10" font-weight="700" letter-spacing="3">KIID AI</text>
   </svg>
 </div>
 
-<!-- FRONT -->
+<!-- FRONT — everything inside one card -->
 <div class="card-front" id="card-front">
-  <img id="card-img" src="" alt="">
-  <div class="topbar"></div>
-  <div class="label" id="card-label"></div>
-  <div class="overlay">
-    <div class="name" id="card-name"></div>
+  <div class="card-topbar"></div>
+  <div class="card-label" id="card-label"></div>
+  <div class="card-img-wrap">
+    <img id="card-img" src="" alt="">
+  </div>
+  <div class="card-name" id="card-name"></div>
+  <div class="card-divider"></div>
+  <div class="card-reading">
+    <div class="reading-lbl">&#10022; Your Reading &#10022;</div>
+    <div class="reading-txt" id="reading-txt"></div>
     <div class="kws" id="card-kws"></div>
   </div>
 </div>
 
-<div class="reading" id="reading">
-  <div class="reading-lbl">&#10022; Your Reading &#10022;</div>
-  <div class="reading-txt" id="reading-txt"></div>
-</div>
 <button class="btn" id="btn" onclick="redraw()">Draw Another Card</button>
 
 <script>
@@ -155,43 +245,28 @@ var CARDS = [
   {id:'world',label:'THE WORLD · XXI',name:'The World',kws:["completion", "wholeness", "achievement"],reading:'You have arrived. Honour how far you have come. This is a moment of real fullness — let yourself feel it completely.'},
   {id:'magician',label:'THE MAGICIAN · I',name:'The Magician',kws:["manifestation", "power", "willpower"],reading:'Everything you need is already in your hands. Stop waiting for permission — your ideas, your drive, your skills are enough. Begin.'}
 ];
-
-var current = null, lastIndex = -1, revealed = false;
-
-function pickCard() {
-  var i;
-  do { i = Math.floor(Math.random() * CARDS.length); } while (i === lastIndex && CARDS.length > 1);
-  lastIndex = i;
-  current = CARDS[i];
+var current=null,lastIndex=-1,revealed=false;
+function pickCard(){var i;do{i=Math.floor(Math.random()*CARDS.length);}while(i===lastIndex&&CARDS.length>1);lastIndex=i;current=CARDS[i];}
+function reveal(){
+  if(revealed)return;revealed=true;
+  document.getElementById('card-img').src='images/'+current.id+'.png';
+  document.getElementById('card-img').alt=current.name;
+  document.getElementById('card-label').textContent=current.label;
+  document.getElementById('card-name').textContent=current.name;
+  document.getElementById('reading-txt').textContent=current.reading;
+  document.getElementById('card-kws').innerHTML=current.kws.map(function(k){return'<span class="kw">'+k+'</span>';}).join('');
+  document.getElementById('card-back').style.display='none';
+  document.getElementById('card-front').style.display='flex';
+  document.getElementById('hint').style.display='none';
+  document.getElementById('btn').style.display='block';
 }
-
-function reveal() {
-  if (revealed) return;
-  revealed = true;
-
-  document.getElementById('card-img').src = 'images/' + current.id + '.png';
-  document.getElementById('card-label').textContent = current.label;
-  document.getElementById('card-name').textContent = current.name;
-  document.getElementById('card-kws').innerHTML = current.kws.map(function(k){ return '<span class="kw">'+k+'</span>'; }).join('');
-  document.getElementById('reading-txt').textContent = current.reading;
-
-  document.getElementById('card-back').style.display = 'none';
-  document.getElementById('card-front').style.display = 'block';
-  document.getElementById('hint').style.display = 'none';
-  document.getElementById('reading').style.display = 'block';
-  document.getElementById('btn').style.display = 'block';
+function redraw(){
+  revealed=false;pickCard();
+  document.getElementById('card-back').style.display='block';
+  document.getElementById('card-front').style.display='none';
+  document.getElementById('hint').style.display='flex';
+  document.getElementById('btn').style.display='none';
 }
-
-function redraw() {
-  revealed = false;
-  pickCard();
-  document.getElementById('card-back').style.display = 'block';
-  document.getElementById('card-front').style.display = 'none';
-  document.getElementById('hint').style.display = 'flex';
-  document.getElementById('reading').style.display = 'none';
-  document.getElementById('btn').style.display = 'none';
-}
-
 pickCard();
 </script>
 </body>
