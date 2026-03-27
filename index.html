@@ -118,6 +118,7 @@ body {
   text-align: center;
   letter-spacing: .12em;
   min-height: 1.6em;
+  margin-top: -20px;
   margin-bottom: 10px;
   text-shadow: 0 0 20px rgba(180,80,255,.6);
 }
@@ -227,7 +228,7 @@ h1 span { background:linear-gradient(90deg,#f04fa8,#a05dd4);-webkit-background-c
 .reading-txt { font-size:.86rem;line-height:1.65;color:rgba(255,255,255,.7);text-align:center;margin-bottom:12px; }
 .kws { display:flex;gap:6px;justify-content:center;flex-wrap:wrap; }
 .kw { font-size:10px;font-weight:700;padding:5px 14px;border-radius:100px;background:rgba(210,40,135,.2);color:#f04fa8;border:1px solid rgba(210,40,135,.45);text-transform:uppercase;letter-spacing:.1em; }
-.btn-row {display:none;flex-direction:row;gap:10px;width:100%;max-width:340px;margin-top:18px;}
+.btn-row {display:none;flex-direction:row;gap:10px;width:100%;}
 .btn-row.show {display:flex;}
 .btn {background:linear-gradient(135deg,#d22887,#9b3dd4);color:white;font-family:'Inter',sans-serif;font-size:13px;font-weight:800;border:none;border-radius:100px;padding:14px 16px;cursor:pointer;flex:1;-webkit-appearance:none;touch-action:manipulation;box-shadow:0 8px 32px rgba(210,40,135,.4);white-space:nowrap;}
 .btn:active {opacity:.88;transform:scale(.98);}
@@ -304,16 +305,56 @@ h1 span { background:linear-gradient(90deg,#f04fa8,#a05dd4);-webkit-background-c
           <animateTransform attributeName="transform" type="rotate" from="360 118 125" to="0 118 125" dur="6s" repeatCount="indefinite"/>
         </ellipse>
 
-        <!-- Lightning bolt inside ball -->
-        <g opacity="0" filter="url(#glow)">
-          <path d="M138 55 L118 105 L132 105 L112 165 L145 100 L130 100 L148 55 Z" fill="white" opacity=".95"/>
-          <path d="M138 55 L118 105 L132 105 L112 165 L145 100 L130 100 L148 55 Z" fill="#cc88ff" opacity=".5"/>
-          <animate attributeName="opacity" values="0;0;0;0;0;0;1;0;0;1;0;0;0;0;0;1;0" dur="5s" repeatCount="indefinite"/>
+        <!-- Chain lightning — 3 unique random-shaped bolts -->
+        <g filter="url(#glow)">
+
+          <!-- LEFT bolt: sharp leftward jag then hooks right at bottom -->
+          <polyline points="92,48 80,65 94,62 74,88 90,85 78,108 96,112 84,148"
+            stroke="white" stroke-width="1.8" fill="none" stroke-linejoin="round" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;0;0;0;0;1;0;0;0;1;0;0" dur="4.3s" repeatCount="indefinite"/>
+          </polyline>
+          <!-- Left bolt: short upward branch mid-way -->
+          <polyline points="74,88 60,82 68,76" stroke="white" stroke-width=".9" fill="none" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;0;0;0;0;1;0;0;0;1;0;0" dur="4.3s" repeatCount="indefinite"/>
+          </polyline>
+          <!-- Left bolt: downward fork at base -->
+          <polyline points="84,148 74,158 80,164" stroke="#aaddff" stroke-width=".8" fill="none" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;1;0;0;0;0;1;0;0;0;1;0;0" dur="4.3s" repeatCount="indefinite"/>
+          </polyline>
+
+          <!-- CENTRE bolt: wide shallow zigzag, leans right then left -->
+          <polyline points="128,40 144,60 124,68 148,90 126,98 145,118 128,145"
+            stroke="#ffffff" stroke-width="2.2" fill="none" stroke-linejoin="round" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;1;0;0;1;0;0;0;0;1;0" dur="3.6s" repeatCount="indefinite"/>
+          </polyline>
+          <!-- Centre: long reaching branch left from mid -->
+          <polyline points="126,98 108,106 114,116 104,122" stroke="#eeccff" stroke-width="1.2" fill="none" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;1;0;0;1;0;0;0;0;1;0" dur="3.6s" repeatCount="indefinite"/>
+          </polyline>
+          <!-- Centre: tiny right branch near top -->
+          <polyline points="144,60 156,54 152,62" stroke="#ffffff" stroke-width=".8" fill="none" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;1;0;0;1;0;0;0;0;1;0" dur="3.6s" repeatCount="indefinite"/>
+          </polyline>
+
+          <!-- RIGHT bolt: tight rapid zigzag, more vertical and chaotic -->
+          <polyline points="168,55 176,70 162,75 178,94 164,100 180,116 166,122 178,148"
+            stroke="#cc88ff" stroke-width="1.6" fill="none" stroke-linejoin="round" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;0;1;0;0;1;0;0;1;0;0" dur="4.8s" repeatCount="indefinite"/>
+          </polyline>
+          <!-- Right bolt: branch shoots far right -->
+          <polyline points="178,94 194,100 188,110 198,116" stroke="#cc88ff" stroke-width="1" fill="none" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;0;1;0;0;1;0;0;1;0;0" dur="4.8s" repeatCount="indefinite"/>
+          </polyline>
+          <!-- Right bolt: tiny upward spike -->
+          <polyline points="166,122 158,130 162,138" stroke="#dd99ff" stroke-width=".8" fill="none" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0;0;0;0;1;0;0;1;0;0;1;0;0" dur="4.8s" repeatCount="indefinite"/>
+          </polyline>
+
         </g>
 
-        <!-- Glow flash when lightning fires -->
+        <!-- Glow flashes staggered per bolt -->
         <circle cx="130" cy="118" r="90" fill="url(#lightningGlow)" opacity="0">
-          <animate attributeName="opacity" values="0;0;0;0;0;0;.6;0;0;.4;0;0;0;0;0;.5;0" dur="5s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0;0;0;0;.6;0;.7;.5;0;.6;.5;0;0;.5;.6;0" dur="4s" repeatCount="indefinite"/>
         </circle>
 
         <!-- Floating symbols -->
@@ -348,36 +389,73 @@ h1 span { background:linear-gradient(90deg,#f04fa8,#a05dd4);-webkit-background-c
       <circle cx="130" cy="118" r="90" fill="none" stroke="rgba(160,80,255,.4)" stroke-width="1.5"/>
       <circle cx="130" cy="118" r="90" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="3"/>
 
-        <!-- Eerie clouds in front of ball -->
-      <!-- Cloud left -->
-      <ellipse cx="52" cy="195" rx="48" ry="22" fill="#b8a8c8" opacity=".55"/>
-      <ellipse cx="38" cy="188" rx="30" ry="16" fill="#d0c0e0" opacity=".5"/>
-      <ellipse cx="70" cy="182" rx="35" ry="18" fill="#c8b8d8" opacity=".5"/>
-      <ellipse cx="52" cy="178" rx="25" ry="14" fill="#e0d0f0" opacity=".45">
-        <animate attributeName="opacity" values=".5;.8;.5" dur="4s" repeatCount="indefinite"/>
-      </ellipse>
-      <ellipse cx="55" cy="185" rx="40" ry="18" fill="#c0a8d8" opacity=".3" filter="url(#softblur)"/>
+        <!-- Fluffy clouds left -->
+      <g opacity=".75" filter="url(#softblur)">
+        <path d="M-5 210 Q8 195 22 198 Q28 185 42 187 Q50 178 64 182 Q76 174 86 182 Q96 176 100 188 Q108 185 110 196 Q115 205 108 212 Z" fill="#ddd0ee"/>
+        <circle cx="22" cy="196" r="10" fill="#e8ddf5"/>
+        <circle cx="36" cy="188" r="12" fill="#e0d4f0"/>
+        <circle cx="52" cy="182" r="14" fill="#ece4f8"/>
+        <circle cx="68" cy="181" r="11" fill="#e4d8f2"/>
+        <circle cx="82" cy="184" r="9" fill="#ddd0ee"/>
+        <circle cx="95" cy="190" r="8" fill="#d8cceb"/>
+      </g>
+      <g opacity=".5">
+        <circle cx="22" cy="196" r="10" fill="#f0e8ff"/>
+        <circle cx="36" cy="188" r="12" fill="#ecdeff"/>
+        <circle cx="52" cy="182" r="14" fill="#f4eeff"/>
+        <circle cx="68" cy="181" r="11" fill="#eee6ff"/>
+        <circle cx="82" cy="184" r="9" fill="#e8e0f8"/>
+        <circle cx="95" cy="190" r="8" fill="#e0d8f0"/>
+        <path d="M-5 210 Q8 195 22 198 Q28 185 42 187 Q50 178 64 182 Q76 174 86 182 Q96 176 100 188 Q108 185 110 196 Q115 205 108 212 Z" fill="#e8e0f8"/>
+      </g>
 
-      <!-- Cloud right -->
-      <ellipse cx="208" cy="192" rx="48" ry="22" fill="#b8a8c8" opacity=".55"/>
-      <ellipse cx="222" cy="184" rx="32" ry="16" fill="#d0c0e0" opacity=".5"/>
-      <ellipse cx="192" cy="180" rx="36" ry="19" fill="#c8b8d8" opacity=".5"/>
-      <ellipse cx="210" cy="176" rx="26" ry="14" fill="#e0d0f0" opacity=".45">
-        <animate attributeName="opacity" values=".6;.85;.6" dur="5s" repeatCount="indefinite"/>
-      </ellipse>
-      <ellipse cx="205" cy="183" rx="42" ry="18" fill="#c0a8d8" opacity=".3" filter="url(#softblur)"/>
+      <!-- Fluffy clouds right -->
+      <g opacity=".75" filter="url(#softblur)">
+        <path d="M265 210 Q252 195 238 198 Q232 185 218 187 Q210 178 196 182 Q184 174 174 182 Q164 176 160 188 Q152 185 150 196 Q145 205 152 212 Z" fill="#ddd0ee"/>
+        <circle cx="238" cy="196" r="10" fill="#e8ddf5"/>
+        <circle cx="224" cy="188" r="12" fill="#e0d4f0"/>
+        <circle cx="208" cy="182" r="14" fill="#ece4f8"/>
+        <circle cx="192" cy="181" r="11" fill="#e4d8f2"/>
+        <circle cx="178" cy="184" r="9" fill="#ddd0ee"/>
+        <circle cx="165" cy="190" r="8" fill="#d8cceb"/>
+      </g>
+      <g opacity=".5">
+        <circle cx="238" cy="196" r="10" fill="#f0e8ff"/>
+        <circle cx="224" cy="188" r="12" fill="#ecdeff"/>
+        <circle cx="208" cy="182" r="14" fill="#f4eeff"/>
+        <circle cx="192" cy="181" r="11" fill="#eee6ff"/>
+        <circle cx="178" cy="184" r="9" fill="#e8e0f8"/>
+        <circle cx="165" cy="190" r="8" fill="#e0d8f0"/>
+        <path d="M265 210 Q252 195 238 198 Q232 185 218 187 Q210 178 196 182 Q184 174 174 182 Q164 176 160 188 Q152 185 150 196 Q145 205 152 212 Z" fill="#e8e0f8"/>
+      </g>
 
-      <!-- Wisp tendrils rising from bottom -->
-      <ellipse cx="100" cy="220" rx="60" ry="20" fill="#b0a0c0" opacity=".45"/>
-      <ellipse cx="160" cy="225" rx="50" ry="18" fill="#c0b0d0" opacity=".45"/>
-      <ellipse cx="130" cy="230" rx="80" ry="22" fill="#a898b8" opacity=".5"/>
-      <!-- Glowing wisps -->
-      <ellipse cx="90" cy="215" rx="30" ry="12" fill="#d0c0e0" opacity=".3" filter="url(#softblur)">
-        <animate attributeName="rx" values="28;34;28" dur="3s" repeatCount="indefinite"/>
-      </ellipse>
-      <ellipse cx="170" cy="218" rx="28" ry="11" fill="#d0c0e0" opacity=".25" filter="url(#softblur)">
-        <animate attributeName="rx" values="26;32;26" dur="4s" repeatCount="indefinite"/>
-      </ellipse>
+      <!-- Bottom fluffy cloud row — same style as side clouds -->
+      <g opacity=".75" filter="url(#softblur)">
+        <path d="M20 235 Q35 220 50 222 Q56 210 70 212 Q78 204 92 208 Q104 200 118 206 Q130 198 142 206 Q156 200 168 208 Q182 204 190 212 Q204 210 210 222 Q225 220 240 235 Z" fill="#ddd0ee"/>
+        <circle cx="50" cy="220" r="9" fill="#e8ddf5"/>
+        <circle cx="64" cy="212" r="11" fill="#e0d4f0"/>
+        <circle cx="80" cy="207" r="13" fill="#ece4f8"/>
+        <circle cx="96" cy="205" r="11" fill="#e4d8f2"/>
+        <circle cx="112" cy="203" r="12" fill="#ece4f8"/>
+        <circle cx="130" cy="201" r="13" fill="#f0e8ff"/>
+        <circle cx="148" cy="203" r="12" fill="#ece4f8"/>
+        <circle cx="164" cy="205" r="11" fill="#e4d8f2"/>
+        <circle cx="180" cy="207" r="13" fill="#ece4f8"/>
+        <circle cx="196" cy="212" r="11" fill="#e0d4f0"/>
+        <circle cx="210" cy="220" r="9" fill="#e8ddf5"/>
+      </g>
+      <g opacity=".45">
+        <circle cx="64" cy="212" r="11" fill="#f0e8ff"/>
+        <circle cx="80" cy="207" r="13" fill="#f4eeff"/>
+        <circle cx="96" cy="205" r="11" fill="#eee6ff"/>
+        <circle cx="112" cy="203" r="12" fill="#f4eeff"/>
+        <circle cx="130" cy="201" r="13" fill="#f8f0ff"/>
+        <circle cx="148" cy="203" r="12" fill="#f4eeff"/>
+        <circle cx="164" cy="205" r="11" fill="#eee6ff"/>
+        <circle cx="180" cy="207" r="13" fill="#f4eeff"/>
+        <circle cx="196" cy="212" r="11" fill="#f0e8ff"/>
+        <path d="M20 235 Q35 220 50 222 Q56 210 70 212 Q78 204 92 208 Q104 200 118 206 Q130 198 142 206 Q156 200 168 208 Q182 204 190 212 Q204 210 210 222 Q225 220 240 235 Z" fill="#e8e0f8"/>
+      </g>
 
     </svg>
   </div>
@@ -452,13 +530,13 @@ h1 span { background:linear-gradient(90deg,#f04fa8,#a05dd4);-webkit-background-c
       <div class="reading-lbl">&#10022; Your Reading &#10022;</div>
       <div class="reading-txt" id="reading-txt"></div>
       <div class="kws" id="card-kws"></div>
+      <div class="btn-row" id="btn-row" style="margin-top:14px;">
+        <button class="btn" onclick="redraw()">Draw Another</button>
+        <button class="btn" onclick="shareCard()">Share Fortune</button>
+      </div>
     </div>
   </div>
 
-  <div class="btn-row" id="btn-row">
-  <button class="btn" onclick="redraw()">Draw Card</button>
-  <button class="btn" onclick="shareCard()">Share Fortune</button>
-</div>
 </div>
 
 <script>
@@ -557,14 +635,14 @@ function reveal(){{
   document.getElementById('card-back').style.display='none';
   document.getElementById('card-front').style.display='flex';
   document.getElementById('hint').style.display='none';
-  document.getElementById('btn-row').classList.add('show');
+  document.getElementById('btn-row').style.display='flex';
 }}
 function redraw(){{
   revealed=false;pickCard();
   document.getElementById('card-back').style.display='block';
   document.getElementById('card-front').style.display='none';
   document.getElementById('hint').style.display='flex';
-  document.getElementById('btn-row').classList.remove('show');
+  document.getElementById('btn-row').style.display='none';
 }}
 pickCard();
 
