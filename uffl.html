@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UFFL Hall of Champions</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold: #C9A84C;
+      --gold-light: #E8C97A;
+      --gold-dim: #8A6E30;
+      --bg-deep: #0D0B07;
+      --bg-card: #1A1710;
+      --bg-card-hover: #201E13;
+      --border-gold: rgba(201,168,76,0.3);
+      --border-gold-bright: rgba(201,168,76,0.7);
+      --text-cream: #F0E8D0;
+      --text-muted: #8A7D60;
+      --text-dim: #4A4333;
+      --red-accent: #8B2020;
+    }
+
+    body {
+      background-color: var(--bg-deep);
+      color: var(--text-cream);
+      font-family: 'EB Garamond', Georgia, serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(201,168,76,0.015) 2px, rgba(201,168,76,0.015) 4px),
+        repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(201,168,76,0.01) 2px, rgba(201,168,76,0.01) 4px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    header {
+      position: relative;
+      text-align: center;
+      padding: 4rem 2rem 3rem;
+      border-bottom: 1px solid var(--border-gold);
+      background: linear-gradient(180deg, rgba(201,168,76,0.08) 0%, transparent 100%);
+    }
+
+    .crest { width: 80px; height: 80px; margin: 0 auto 1.5rem; }
+
+    .league-name {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(0.7rem, 2vw, 0.9rem);
+      letter-spacing: 0.4em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+
+    h1 {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(2rem, 6vw, 4rem);
+      font-weight: 700;
+      color: var(--gold-light);
+      line-height: 1.1;
+      text-shadow: 0 0 60px rgba(201,168,76,0.3);
+    }
+
+    .subtitle {
+      font-family: 'EB Garamond', serif;
+      font-style: italic;
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin: 1.5rem auto 0;
+      max-width: 400px;
+    }
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+    }
+    .divider-diamond {
+      width: 8px; height: 8px;
+      background: var(--gold);
+      transform: rotate(45deg);
+      flex-shrink: 0;
+    }
+
+    main {
+      position: relative;
+      z-index: 1;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 5rem;
+    }
+
+    .stats-bar {
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+      flex-wrap: wrap;
+      margin-bottom: 3rem;
+      padding: 1.25rem 2rem;
+      border: 1px solid var(--border-gold);
+      background: rgba(201,168,76,0.04);
+    }
+    .stat { text-align: center; }
+    .stat-number {
+      font-family: 'Cinzel', serif;
+      font-size: 1.8rem;
+      color: var(--gold);
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-top: 0.25rem;
+    }
+
+    .section-label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.35em;
+      color: var(--gold-dim);
+      text-transform: uppercase;
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Leaderboard */
+    .leaderboard {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+      gap: 0.6rem;
+      margin-bottom: 3rem;
+      padding: 1.5rem;
+      border: 1px solid var(--border-gold);
+      background: rgba(201,168,76,0.02);
+    }
+
+    .lb-entry {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .lb-rank {
+      font-family: 'Cinzel', serif;
+      font-size: 0.62rem;
+      color: var(--text-dim);
+      width: 1.2rem;
+      flex-shrink: 0;
+    }
+    .lb-name {
+      font-family: 'Cinzel', serif;
+      font-size: 0.82rem;
+      color: var(--text-cream);
+      flex: 1;
+    }
+    .lb-count {
+      font-family: 'Cinzel', serif;
+      font-size: 0.72rem;
+      color: var(--bg-deep);
+      padding: 0.1rem 0.4rem;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+    .lb-count.gold   { background: var(--gold); }
+    .lb-count.silver { background: #A8A8A8; }
+    .lb-count.bronze { background: #CD7F32; }
+    .lb-count.plain  { background: var(--text-dim); }
+
+    /* View controls */
+    .view-controls {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+    }
+    .view-btn {
+      font-family: 'Cinzel', serif;
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      background: none;
+      border: 1px solid var(--border-gold);
+      color: var(--text-muted);
+      padding: 0.4rem 1rem;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .view-btn.active, .view-btn:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+      background: rgba(201,168,76,0.07);
+    }
+
+    /* Cards grid */
+    #champions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 4rem;
+    }
+
+    #champions-grid.list-view {
+      display: block;
+      margin-bottom: 4rem;
+    }
+    #champions-grid.list-view .champion-card {
+      border-radius: 0;
+      border-bottom: none;
+      padding: 0.85rem 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    #champions-grid.list-view .champion-card:last-child {
+      border-bottom: 1px solid var(--border-gold);
+    }
+    #champions-grid.list-view .champion-card::before { display: none; }
+    #champions-grid.list-view .card-trophy { display: none; }
+    #champions-grid.list-view .avatar { width: 34px; height: 34px; font-size: 0.8rem; flex-shrink: 0; }
+    #champions-grid.list-view .card-top { margin-bottom: 0; flex: 1; align-items: center; }
+    #champions-grid.list-view .nickname { display: none; }
+    #champions-grid.list-view .reigning-badge { display: none; }
+    #champions-grid.list-view .team-name { display: none; }
+    #champions-grid.list-view .champion-name { font-size: 0.92rem; }
+    #champions-grid.list-view .champion-year { font-size: 0.65rem; margin-bottom: 0.1rem; }
+    #champions-grid.list-view .reigning-inline {
+      display: inline-block;
+      font-family: 'Cinzel', serif;
+      font-size: 0.55rem;
+      letter-spacing: 0.15em;
+      color: var(--bg-deep);
+      background: var(--gold);
+      padding: 0.1rem 0.4rem;
+      text-transform: uppercase;
+      margin-left: 0.5rem;
+      vertical-align: middle;
+    }
+
+    .champion-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-gold);
+      border-radius: 2px;
+      padding: 1.5rem;
+      position: relative;
+      transition: background 0.2s, border-color 0.2s;
+      overflow: hidden;
+    }
+    .champion-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .champion-card:hover { background: var(--bg-card-hover); border-color: var(--border-gold-bright); }
+    .champion-card:hover::before { opacity: 1; }
+    .champion-card.reigning {
+      border-color: var(--gold);
+      background: linear-gradient(135deg, #1A1710 0%, #201A08 100%);
+    }
+    .champion-card.reigning::before { opacity: 1; }
+
+    .reigning-badge {
+      display: inline-block;
+      font-family: 'Cinzel', serif;
+      font-size: 0.58rem;
+      letter-spacing: 0.2em;
+      color: var(--bg-deep);
+      background: var(--gold);
+      padding: 0.18rem 0.55rem;
+      text-transform: uppercase;
+      margin-bottom: 0.9rem;
+    }
+
+    .card-top {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .avatar {
+      width: 50px; height: 50px;
+      border-radius: 50%;
+      border: 2px solid var(--border-gold);
+      flex-shrink: 0;
+      overflow: hidden;
+      background: var(--bg-deep);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cinzel', serif;
+      font-size: 1rem;
+      color: var(--gold);
+    }
+    .avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .reigning .avatar { border-color: var(--gold); }
+
+    .card-info { flex: 1; min-width: 0; }
+
+    .champion-year {
+      font-family: 'Cinzel', serif;
+      font-size: 0.67rem;
+      letter-spacing: 0.22em;
+      color: var(--gold-dim);
+      text-transform: uppercase;
+      margin-bottom: 0.2rem;
+    }
+    .champion-name {
+      font-family: 'Cinzel', serif;
+      font-size: 1.05rem;
+      color: var(--text-cream);
+      font-weight: 600;
+    }
+    .team-name {
+      font-family: 'EB Garamond', serif;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-top: 0.1rem;
+    }
+
+    .nickname {
+      font-family: 'EB Garamond', serif;
+      font-style: italic;
+      font-size: 0.92rem;
+      color: var(--gold-dim);
+      border-top: 1px solid var(--border-gold);
+      padding-top: 0.6rem;
+      margin-top: 0.6rem;
+    }
+    .nickname::before { content: '\201C'; }
+    .nickname::after  { content: '\201D'; }
+
+    .card-trophy {
+      position: absolute;
+      bottom: 0.75rem; right: 0.9rem;
+      opacity: 0.055;
+      font-size: 3rem;
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    .card-actions {
+      position: absolute;
+      top: 0.55rem; right: 0.55rem;
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+    .champion-card:hover .card-actions { opacity: 1; }
+
+    .empty-state {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--text-muted);
+      font-style: italic;
+      font-size: 1.1rem;
+      border: 1px dashed var(--text-dim);
+      border-radius: 2px;
+    }
+
+    /* Admin */
+    .admin-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      margin: 0 auto 2rem;
+      cursor: pointer;
+      background: none;
+      border: 1px solid var(--text-dim);
+      border-radius: 2px;
+      color: var(--text-dim);
+      font-family: 'Cinzel', serif;
+      font-size: 0.62rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      padding: 0.5rem 1.3rem;
+      transition: all 0.2s;
+    }
+    .admin-toggle:hover { border-color: var(--gold); color: var(--gold); background: rgba(201,168,76,0.05); }
+
+    #admin-panel {
+      display: none;
+      background: var(--bg-card);
+      border: 1px solid var(--border-gold);
+      border-radius: 2px;
+      padding: 2rem;
+      margin-bottom: 3rem;
+    }
+    #admin-panel.open { display: block; }
+
+    .admin-title {
+      font-family: 'Cinzel', serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.28em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border-gold);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+    .form-group.full { grid-column: 1 / -1; }
+
+    label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.62rem;
+      letter-spacing: 0.18em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    input[type="text"], input[type="url"] {
+      background: var(--bg-deep);
+      border: 1px solid var(--border-gold);
+      border-radius: 2px;
+      color: var(--text-cream);
+      font-family: 'EB Garamond', serif;
+      font-size: 1rem;
+      padding: 0.58rem 0.85rem;
+      transition: border-color 0.2s;
+      width: 100%;
+    }
+    input:focus { outline: none; border-color: var(--gold); }
+    input::placeholder { color: var(--text-dim); }
+
+    .checkbox-group { display: flex; align-items: center; gap: 0.6rem; }
+    .checkbox-group input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--gold); flex-shrink: 0; }
+    .checkbox-group label {
+      font-family: 'EB Garamond', serif;
+      font-size: 0.95rem;
+      letter-spacing: normal;
+      text-transform: none;
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      font-family: 'Cinzel', serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--bg-deep);
+      background: var(--gold);
+      border: none;
+      border-radius: 2px;
+      padding: 0.72rem 2rem;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-top: 0.5rem;
+    }
+    .btn-primary:hover { background: var(--gold-light); }
+
+    .btn-danger {
+      background: none;
+      border: 1px solid var(--red-accent);
+      color: #c0534f;
+      font-family: 'Cinzel', serif;
+      font-size: 0.56rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.2rem 0.5rem;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-danger:hover { background: var(--red-accent); color: var(--text-cream); }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      border-top: 1px solid var(--border-gold);
+      font-size: 0.82rem;
+      color: var(--text-dim);
+      font-style: italic;
+    }
+
+    @media (max-width: 600px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .stats-bar { gap: 1.2rem; }
+      h1 { font-size: 2rem; }
+      #champions-grid { grid-template-columns: 1fr; }
+      .leaderboard { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="crest">
+    <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M40 4 L70 18 L70 42 C70 58 56 70 40 76 C24 70 10 58 10 42 L10 18 Z" stroke="#C9A84C" stroke-width="1.5" fill="rgba(201,168,76,0.06)"/>
+      <path d="M40 14 L62 24 L62 42 C62 54 52 63 40 68 C28 63 18 54 18 42 L18 24 Z" stroke="#C9A84C" stroke-width="0.75" stroke-dasharray="2 2" fill="none"/>
+      <path d="M28 38 L34 32 L40 38 L46 32 L52 38 L46 44 L40 50 L34 44 Z" fill="rgba(201,168,76,0.15)" stroke="#C9A84C" stroke-width="1"/>
+      <circle cx="40" cy="41" r="5" fill="#C9A84C" opacity="0.6"/>
+      <path d="M32 26 L40 22 L48 26" stroke="#C9A84C" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+    </svg>
+  </div>
+  <p class="league-name">Ultimate Fantasy Football League</p>
+  <h1>Hall of Champions</h1>
+  <p class="subtitle">Where legends are forged and glory is eternal</p>
+  <div class="divider"><div class="divider-diamond"></div></div>
+</header>
+
+<main>
+
+  <div class="stats-bar">
+    <div class="stat">
+      <div class="stat-number" id="stat-seasons">0</div>
+      <div class="stat-label">Seasons</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number" id="stat-unique">0</div>
+      <div class="stat-label">Unique Champions</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number" id="stat-dynasty">—</div>
+      <div class="stat-label">Most Titles</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number" id="stat-reigning">—</div>
+      <div class="stat-label">Reigning Champion</div>
+    </div>
+  </div>
+
+  <p class="section-label">&#9670; Title Board &#9670;</p>
+  <div class="leaderboard" id="leaderboard"></div>
+
+  <p class="section-label">&#9670; The Immortals &#9670;</p>
+
+  <div class="view-controls">
+    <button class="view-btn active" id="btn-grid" onclick="setView('grid')">Grid</button>
+    <button class="view-btn" id="btn-list" onclick="setView('list')">Timeline</button>
+  </div>
+
+  <div id="champions-grid"></div>
+
+  <div style="text-align:center; margin-bottom: 1.5rem;">
+    <button class="admin-toggle" onclick="toggleAdmin()">&#9670; Commissioner Panel</button>
+  </div>
+
+  <div id="admin-panel">
+    <p class="admin-title">&#9670; Enshrine a Champion</p>
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="f-season">Season (e.g. 2026-2027)</label>
+        <input type="text" id="f-season" placeholder="2026-2027" />
+      </div>
+      <div class="form-group">
+        <label for="f-name">Champion's Name</label>
+        <input type="text" id="f-name" placeholder="Name or nickname" />
+      </div>
+      <div class="form-group">
+        <label for="f-team">Team Name (optional)</label>
+        <input type="text" id="f-team" placeholder="e.g. The Iron Throne" />
+      </div>
+      <div class="form-group">
+        <label for="f-nickname">Nickname / Title (optional)</label>
+        <input type="text" id="f-nickname" placeholder="e.g. The Dynasty Begins" />
+      </div>
+      <div class="form-group full">
+        <label for="f-avatar">Avatar Image URL (optional)</label>
+        <input type="url" id="f-avatar" placeholder="https://..." />
+      </div>
+      <div class="form-group full">
+        <div class="checkbox-group">
+          <input type="checkbox" id="f-reigning" />
+          <label for="f-reigning">This is the current reigning champion</label>
+        </div>
+      </div>
+    </div>
+    <button class="btn-primary" onclick="addChampion()">&#9670; Enshrine Champion</button>
+  </div>
+
+</main>
+
+<footer>
+  <p>UFFL &mdash; Ultimate Fantasy Football League &mdash; Est. 1997</p>
+</footer>
+
+<script>
+const STORAGE_KEY = 'uffl_v3';
+let currentView = 'grid';
+
+const SEED = [
+  { season:"2025-2026", name:"Sean",  team:"", nickname:"", avatar:"", reigning:true  },
+  { season:"2024-2025", name:"Mike",  team:"", nickname:"", avatar:"", reigning:false },
+  { season:"2023-2024", name:"Mike",  team:"", nickname:"", avatar:"", reigning:false },
+  { season:"2022-2023", name:"Mike",  team:"", nickname:"", avatar:"", reigning:false },
+  { season:"2021-2022", name:"Mark",  team:"", nickname:"", avatar:"", reigning:false },
+  { season:"2020-2021", name:"Mike",  team:"", nickname:"", avatar:"", reigning:false },
+  { season:"2019-2020", name:"Kunal", team:"", nickname:"", avatar:"", reigning:false },
+  { season:"2018-2019", name:"Jimmy", team:"", nickname:"", avatar:"", reigning:false },
+  { season:"2017-2018", name:"Sammy", team:"", nickname:"", avatar:"", reigning:false },
+  { season:"2016-2017", name:"Al",    team:"", nickname:"", avatar:"", reigning:false },
+  { season:"2015-2016", name:"Pygs",  team:"", nickname:"", avatar:"", reigning:false },
+  { season:"2014-2015", name:"Mike",  team:"", nickname:"", avatar:"", reigning:false },
+  { season:"2013-2014", name:"Ian",   team:"", nickname:"", avatar:"", reigning:false },
+  { season:"2012-2013", name:"Kuni",  team:"", nickname:"", avatar:"", reigning:false },
+  { season:"2011-2012", name:"Mike",  team:"", nickname:"", avatar:"", reigning:false },
+  { season:"2010-2011", name:"Mark",  team:"", nickname:"", avatar:"", reigning:false },
+  { season:"2009-2010", name:"Drew",  team:"", nickname:"", avatar:"", reigning:false },
+  { season:"2008-2009", name:"Sadek", team:"", nickname:"", avatar:"", reigning:false },
+  { season:"2007-2008", name:"HZD",   team:"", nickname:"", avatar:"", reigning:false },
+  { season:"2006-2007", name:"Chris", team:"", nickname:"", avatar:"", reigning:false },
+  { season:"2005-2006", name:"Sean",  team:"", nickname:"", avatar:"", reigning:false },
+  { season:"2004-2005", name:"Mike",  team:"", nickname:"", avatar:"", reigning:false },
+  { season:"2003-2004", name:"Mark",  team:"", nickname:"", avatar:"", reigning:false },
+  { season:"2002-2003", name:"Sadek", team:"", nickname:"", avatar:"", reigning:false },
+  { season:"2001-2002", name:"Kunal", team:"", nickname:"", avatar:"", reigning:false },
+  { season:"2000-2001", name:"Sean",  team:"", nickname:"", avatar:"", reigning:false },
+  { season:"1999-2000", name:"Sadek", team:"", nickname:"", avatar:"", reigning:false },
+  { season:"1998-1999", name:"Kosta", team:"", nickname:"", avatar:"", reigning:false },
+  { season:"1997-1998", name:"Andy",  team:"", nickname:"", avatar:"", reigning:false },
+];
+
+function load() {
+  try {
+    const s = localStorage.getItem(STORAGE_KEY);
+    if (s) return JSON.parse(s);
+  } catch(e) {}
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(SEED));
+  return SEED;
+}
+
+function save(d) { localStorage.setItem(STORAGE_KEY, JSON.stringify(d)); }
+
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function initials(name) {
+  return name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+}
+
+function sortKey(s) {
+  const m = String(s).match(/(\d{4})/);
+  return m ? parseInt(m[1]) : 0;
+}
+
+function titleCounts(data) {
+  const c = {};
+  data.forEach(d => { c[d.name] = (c[d.name]||0)+1; });
+  return c;
+}
+
+function renderCard(c, idx, view) {
+  const ini = initials(c.name);
+  const avatarHTML = c.avatar
+    ? `<img src="${esc(c.avatar)}" alt="${esc(c.name)}" onerror="this.style.display='none';this.parentNode.textContent='${ini}'">`
+    : ini;
+
+  if (view === 'list') {
+    return `
+      <div class="champion-card${c.reigning?' reigning':''}">
+        <div class="card-actions"><button class="btn-danger" onclick="removeChampion(${idx})">Remove</button></div>
+        <div class="avatar">${avatarHTML}</div>
+        <div class="card-top">
+          <div class="card-info">
+            <div class="champion-year">${esc(c.season)}</div>
+            <div class="champion-name">${esc(c.name)}${c.reigning?'<span class="reigning-inline">Reigning</span>':''}</div>
+          </div>
+        </div>
+      </div>`;
+  }
+
+  return `
+    <div class="champion-card${c.reigning?' reigning':''}">
+      <div class="card-actions"><button class="btn-danger" onclick="removeChampion(${idx})">Remove</button></div>
+      ${c.reigning?'<span class="reigning-badge">&#9670; Reigning Champion</span>':''}
+      <div class="card-top">
+        <div class="avatar">${avatarHTML}</div>
+        <div class="card-info">
+          <div class="champion-year">${esc(c.season)}</div>
+          <div class="champion-name">${esc(c.name)}</div>
+          ${c.team?`<div class="team-name">${esc(c.team)}</div>`:''}
+        </div>
+      </div>
+      ${c.nickname?`<div class="nickname">${esc(c.nickname)}</div>`:''}
+      <div class="card-trophy">&#127942;</div>
+    </div>`;
+}
+
+function renderLeaderboard(data) {
+  const counts = titleCounts(data);
+  const sorted = Object.entries(counts).sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0]));
+  document.getElementById('leaderboard').innerHTML = sorted.map(([name,count],i)=>{
+    const cls = i===0?'gold':i===1?'silver':i===2?'bronze':'plain';
+    return `<div class="lb-entry">
+      <span class="lb-rank">${i+1}.</span>
+      <span class="lb-name">${esc(name)}</span>
+      <span class="lb-count ${cls}">${count}x</span>
+    </div>`;
+  }).join('');
+}
+
+function render() {
+  const data = load();
+  const grid = document.getElementById('champions-grid');
+  grid.className = currentView === 'list' ? 'list-view' : '';
+
+  if (!data.length) {
+    grid.innerHTML = '<div class="empty-state">No champions yet. Add the first legend below.</div>';
+  } else {
+    const sorted = [...data].sort((a,b)=>sortKey(b.season)-sortKey(a.season));
+    grid.innerHTML = sorted.map(c => {
+      const idx = data.findIndex(d=>d.season===c.season&&d.name===c.name);
+      return renderCard(c, idx, currentView);
+    }).join('');
+  }
+
+  const counts = titleCounts(data);
+  document.getElementById('stat-seasons').textContent = data.length;
+  document.getElementById('stat-unique').textContent = Object.keys(counts).length;
+
+  if (data.length) {
+    const top = Object.entries(counts).sort((a,b)=>b[1]-a[1])[0];
+    document.getElementById('stat-dynasty').textContent = `${top[0]} (${top[1]}x)`;
+  } else {
+    document.getElementById('stat-dynasty').textContent = '—';
+  }
+
+  const r = data.find(c=>c.reigning);
+  document.getElementById('stat-reigning').textContent = r ? r.name : '—';
+
+  renderLeaderboard(data);
+}
+
+function setView(v) {
+  currentView = v;
+  document.getElementById('btn-grid').classList.toggle('active', v==='grid');
+  document.getElementById('btn-list').classList.toggle('active', v==='list');
+  render();
+}
+
+function addChampion() {
+  const season   = document.getElementById('f-season').value.trim();
+  const name     = document.getElementById('f-name').value.trim();
+  const team     = document.getElementById('f-team').value.trim();
+  const nickname = document.getElementById('f-nickname').value.trim();
+  const avatar   = document.getElementById('f-avatar').value.trim();
+  const reigning = document.getElementById('f-reigning').checked;
+
+  if (!season || !name) { alert('Season and Name are required.'); return; }
+
+  const data = load();
+  if (reigning) data.forEach(c=>c.reigning=false);
+  data.push({ season, name, team, nickname, avatar, reigning });
+  save(data);
+  render();
+
+  ['f-season','f-name','f-team','f-nickname','f-avatar'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('f-reigning').checked = false;
+}
+
+function removeChampion(idx) {
+  if (!confirm('Remove this champion from the Hall?')) return;
+  const data = load();
+  data.splice(idx,1);
+  save(data);
+  render();
+}
+
+function toggleAdmin() {
+  document.getElementById('admin-panel').classList.toggle('open');
+}
+
+render();
+</script>
+</body>
+</html>
