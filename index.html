@@ -89,7 +89,7 @@ body {
 }
 .ball-svg {
   width: 260px;
-  height: 300px;
+  height: 230px;
   filter: drop-shadow(0 0 24px rgba(120,40,255,.8)) drop-shadow(0 0 48px rgba(210,40,135,.35));
 }
 
@@ -205,7 +205,7 @@ body {
 #main.visible { opacity: 1; }
 
 .logo-wrap { display:flex;flex-direction:column;align-items:center;margin-bottom:10px; }
-h1 { font-size:clamp(2rem,9vw,2.8rem);font-weight:900;color:white;text-align:center;margin-bottom:6px;line-height:1.1; }
+h1 { font-size:clamp(1.6rem,7.2vw,2.24rem);font-weight:900;background:linear-gradient(90deg,#f04fa8,#a05dd4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-align:center;margin-bottom:6px;line-height:1.1; }
 h1 span { background:linear-gradient(90deg,#f04fa8,#a05dd4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text; }
 .sub { font-size:.9rem;color:rgba(255,255,255,.4);text-align:center;margin-bottom:24px; }
 .hint { font-size:12px;color:rgba(255,255,255,.3);display:flex;align-items:center;gap:6px;margin-bottom:14px; }
@@ -220,7 +220,7 @@ h1 span { background:linear-gradient(90deg,#f04fa8,#a05dd4);-webkit-background-c
 .card-img-wrap { position:relative;width:100%;height:300px;flex-shrink:0;overflow:hidden; }
 .card-img-wrap img { width:100%;height:300px;object-fit:cover;display:block;object-position:center top; }
 .card-img-wrap::after { content:'';position:absolute;bottom:0;left:0;right:0;height:80px;background:linear-gradient(to top,#0e0818,transparent);pointer-events:none; }
-.card-name { font-size:32px;font-weight:900;color:white;text-align:left;padding:10px 18px 6px;line-height:1.1;flex-shrink:0; }
+.card-name { font-size:32px;font-weight:900;color:white;text-align:center;padding:10px 18px 6px;line-height:1.1;flex-shrink:0; }
 .card-divider { height:1px;background:rgba(255,255,255,.08);margin:0 18px;flex-shrink:0; }
 .card-reading { padding:14px 18px 18px;flex-shrink:0; }
 .reading-lbl { font-size:9px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;background:linear-gradient(90deg,#f04fa8,#a05dd4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-align:center;margin-bottom:8px; }
@@ -245,7 +245,7 @@ h1 span { background:linear-gradient(90deg,#f04fa8,#a05dd4);-webkit-background-c
 
   <!-- Crystal ball + stand -->
   <div class="ball-scene">
-    <svg class="ball-svg" viewBox="0 0 260 300" xmlns="http://www.w3.org/2000/svg">
+    <svg class="ball-svg" viewBox="0 0 260 230" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <radialGradient id="ballGrad" cx="35%" cy="30%" r="70%">
           <stop offset="0%" stop-color="#c8a8ff"/>
@@ -348,37 +348,40 @@ h1 span { background:linear-gradient(90deg,#f04fa8,#a05dd4);-webkit-background-c
       <circle cx="130" cy="118" r="90" fill="none" stroke="rgba(160,80,255,.4)" stroke-width="1.5"/>
       <circle cx="130" cy="118" r="90" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="3"/>
 
-      <!-- ── STAND ── -->
-      <!-- Neck -->
-      <path d="M100 208 Q115 222 130 224 Q145 222 160 208 L155 208 Q143 218 130 220 Q117 218 105 208 Z" fill="#3a1060"/>
-      <ellipse cx="130" cy="208" rx="30" ry="8" fill="#2a0848" stroke="#5a1890" stroke-width="1"/>
-      <!-- Main stand cup -->
-      <path d="M98 208 Q90 230 84 242 L176 242 Q170 230 162 208 Z" fill="url(#standGrad)"/>
-      <defs>
-        <linearGradient id="standGrad" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stop-color="#4a1580"/>
-          <stop offset="50%" stop-color="#2a0848"/>
-          <stop offset="100%" stop-color="#1a0530"/>
-        </linearGradient>
-        <linearGradient id="baseGrad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#3a1060"/>
-          <stop offset="100%" stop-color="#150325"/>
-        </linearGradient>
-      </defs>
-      <!-- Stand rim -->
-      <ellipse cx="130" cy="242" rx="46" ry="10" fill="#3a1060" stroke="#6a20a0" stroke-width="1"/>
-      <!-- Stand stem -->
-      <rect x="122" y="242" width="16" height="18" rx="3" fill="url(#standGrad)"/>
-      <!-- Base -->
-      <ellipse cx="130" cy="260" rx="54" ry="12" fill="url(#baseGrad)" stroke="#5a1890" stroke-width="1"/>
-      <ellipse cx="130" cy="260" rx="42" ry="8" fill="#2a0848" opacity=".6"/>
-      <!-- Stand ornament gems -->
-      <circle cx="104" cy="235" r="3.5" fill="#cc44ff" opacity=".8" filter="url(#glow)"/>
-      <circle cx="130" cy="238" r="3.5" fill="#ff44cc" opacity=".8" filter="url(#glow)"/>
-      <circle cx="156" cy="235" r="3.5" fill="#cc44ff" opacity=".8" filter="url(#glow)"/>
+        <!-- Eerie clouds in front of ball -->
+      <!-- These are drawn AFTER the ball so they appear on top -->
+      <!-- Cloud left -->
+      <ellipse cx="52" cy="175" rx="48" ry="22" fill="#1a0030" opacity=".85"/>
+      <ellipse cx="38" cy="168" rx="30" ry="16" fill="#220040" opacity=".8"/>
+      <ellipse cx="70" cy="162" rx="35" ry="18" fill="#1a0030" opacity=".75"/>
+      <ellipse cx="52" cy="158" rx="25" ry="14" fill="#2a0050" opacity=".6">
+        <animate attributeName="opacity" values=".5;.8;.5" dur="4s" repeatCount="indefinite"/>
+      </ellipse>
+      <!-- Purple tinge on left cloud -->
+      <ellipse cx="55" cy="165" rx="40" ry="18" fill="#330055" opacity=".3" filter="url(#softblur)"/>
 
-      <!-- Ground glow under stand -->
-      <ellipse cx="130" cy="270" rx="60" ry="10" fill="#6600cc" opacity=".2" filter="url(#hardglow)"/>
+      <!-- Cloud right -->
+      <ellipse cx="208" cy="172" rx="48" ry="22" fill="#1a0030" opacity=".85"/>
+      <ellipse cx="222" cy="164" rx="32" ry="16" fill="#220040" opacity=".8"/>
+      <ellipse cx="192" cy="160" rx="36" ry="19" fill="#1a0030" opacity=".75"/>
+      <ellipse cx="210" cy="156" rx="26" ry="14" fill="#2a0050" opacity=".6">
+        <animate attributeName="opacity" values=".6;.85;.6" dur="5s" repeatCount="indefinite"/>
+      </ellipse>
+      <!-- Purple tinge on right cloud -->
+      <ellipse cx="205" cy="163" rx="42" ry="18" fill="#330055" opacity=".3" filter="url(#softblur)"/>
+
+      <!-- Wisp tendrils rising from bottom -->
+      <ellipse cx="100" cy="200" rx="60" ry="20" fill="#110022" opacity=".9"/>
+      <ellipse cx="160" cy="205" rx="50" ry="18" fill="#110022" opacity=".9"/>
+      <ellipse cx="130" cy="210" rx="80" ry="22" fill="#0d001a" opacity=".95"/>
+      <!-- Glowing wisps -->
+      <ellipse cx="90" cy="195" rx="30" ry="12" fill="#440066" opacity=".25" filter="url(#softblur)">
+        <animate attributeName="rx" values="28;34;28" dur="3s" repeatCount="indefinite"/>
+      </ellipse>
+      <ellipse cx="170" cy="198" rx="28" ry="11" fill="#440066" opacity=".2" filter="url(#softblur)">
+        <animate attributeName="rx" values="26;32;26" dur="4s" repeatCount="indefinite"/>
+      </ellipse>
+
     </svg>
   </div>
 
@@ -411,7 +414,7 @@ h1 span { background:linear-gradient(90deg,#f04fa8,#a05dd4);-webkit-background-c
 
 <!-- ══ MAIN ══ -->
 <div id="main">
-  <div class="logo-wrap"><img src="data:image/png;base64,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" width="60" height="60" alt="Kiid AI" style="display:block;"></div>
+  <div class="logo-wrap"><img src="data:image/png;base64,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" width="60" height="60" alt="Kiid AI" style="display:block;"></div>
   <h1>Your <span>Daily Card</span></h1>
   <p class="sub">tap to reveal what the universe has to say</p>
   <div class="hint" id="hint"><div class="pulse"></div>tap the card to reveal</div>
